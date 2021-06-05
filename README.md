@@ -1,5 +1,5 @@
 ##### BETP2-VIAJESC6
-
+ 
 ##### Descripción
 Es una app de vuelos, en la que se realizan consultas pudiendo filtrar por país de origen/destino, y fecha de ida/vuelta. Cada usuario registrado podrá marcar un viaje como favorito, añadiendolo a una lista personal que podrá ver en su perfil, además podrá suscribirse para recibir información sobre promociones. 
 
