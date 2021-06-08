@@ -1,8 +1,6 @@
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
-const geocode = require('./utils/geocode')
-const forecast = require('./utils/forecast')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -48,23 +46,6 @@ app.get('/fly', (req, res) => {
         })
     }
 
-    fly(req.query.address, (error, { latitude, longitude, location } = {}) => {
-        if (error) {
-            return res.send({ error })
-        }
-
-        forecast(latitude, longitude, (error, forecastData) => {
-            if (error) {
-                return res.send({ error })
-            }
-
-            res.send({
-                forecast: forecastData,
-                location,
-                address: req.query.address
-            })
-        })
-    })
 })
 
 app.get('/products', (req, res) => {
@@ -80,13 +61,6 @@ app.get('/products', (req, res) => {
     })
 })
 
-app.get('/help/*', (req, res) => {
-    res.render('404', {
-        title: '404',
-        name: 'Andrew Mead',
-        errorMessage: 'Help article not found.'
-    })
-})
 
 app.get('*', (req, res) => {
     res.render('404', {

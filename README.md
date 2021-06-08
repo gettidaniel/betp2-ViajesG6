@@ -3,6 +3,14 @@
 ##### Descripción
 Es una app de vuelos, en la que se realizan consultas pudiendo filtrar por país de origen/destino, y fecha de ida/vuelta. Cada usuario registrado podrá marcar un viaje como favorito, añadiendolo a una lista personal que podrá ver en su perfil, además podrá suscribirse para recibir información sobre promociones. 
 
+##### Funciones
+Buscar pasajes (se podrá filtrar la búsqueda y luego listar los distintos paquetes según las preferencias del usuario. Menor precio/etc ).
+Comprar Pasajes. *UsuarioCliente 
+Agregar viajes a favoritos. *UsuarioCliente 
+Modificar datos del perfil. *UsuarioCliente 
+Visualizar lista de viajes añadidos a favoritos. *UsuarioCliente
+
+
 ##### Roles
 UsuarioNoLogueado – UsuarioCliente  
 
