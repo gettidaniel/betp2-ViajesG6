@@ -1,5 +1,7 @@
 const connection = require('./connection');
 let objectId = require('mongodb').ObjectId;
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 async function getUsuarios() {
     const clienteMongo = await connection.getConnection();
@@ -18,9 +20,34 @@ async function getUsuario(id) {
 
 async function addUsuario(usuario) {
     const clienteMongo = await connection.getConnection();
+    user.password = bcrypt.hashSync(user.password, 8);
     const agregar = await clienteMongo.db('sample_tp2').collection('usuarios')
         .insertOne(usuario);
     return agregar;
+}
+
+async function findByCredentials(email, password){
+    const clienteMongo = await connection.getConnection();
+
+    const user = await clienteMongo.db('sample_tp2')
+        .collection('users')
+        .findOne({email:email});
+
+        if (!user){
+            throw new Error('Usuario inexistente');
+        }
+
+        const isMatch = bcrypt.compareSync(password, user.password);
+        if (!isMatch){
+            throw new Error('Password invalida');
+        }
+
+        return user;
+}
+
+async function generateJWT(user) {
+    const token = jwt.sign({_id: user._id, email: user.email}, process.env.SECRET, {expiresIn: '1h'});
+    return token;
 }
 
 async function updateUsuario(usuario) {
@@ -46,4 +73,4 @@ async function deleteUsuario(usuario) {
 }
 
 
-module.exports = { getUsuarios, getUsuario, addUsuario, updateUsuario, deleteUsuario };
+module.exports = { getUsuarios, getUsuario, addUsuario, updateUsuario, deleteUsuario, findByCredentials, generateJWT };
