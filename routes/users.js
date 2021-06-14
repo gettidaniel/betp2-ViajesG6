@@ -21,9 +21,21 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     //TODO Validacion
-    let usuario = req.body;
-    usuario = await dataUser.addUsuario(usuario);
+    const usuario = await dataUser.addUsuario(req.body);
     res.json(usuario);
+});
+
+router.post('/login', async (req, res) => {
+
+    try {
+        const user = await dataUser.findByCredentials(req.body.email, req.body.password);
+        const token = await dataUser.generateJWT(user);
+
+        res.send({user, token});
+
+    } catch (error) {
+        res.status(401).send(error.message); //401 Indica desautorizado
+    }
 });
 
 
