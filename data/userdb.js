@@ -20,7 +20,8 @@ async function getUsuario(id) {
 
 async function addUsuario(usuario) {
     const clienteMongo = await connection.getConnection();
-    user.password = bcrypt.hashSync(user.password, 8);
+    usuario.password = bcrypt.hashSync(usuario.password, 8);
+    
     const agregar = await clienteMongo.db('sample_tp2').collection('usuarios')
         .insertOne(usuario);
     return agregar;
