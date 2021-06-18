@@ -1,5 +1,5 @@
 const mongoCLient = require('mongodb').MongoClient;
-const uri = 'mongodb+srv://Santiago:BETP2-2021@cluster0.jg64a.mongodb.net/sample_tp2?retryWrites=true&w=majority';
+const uri = process.env.CONNECTION_MONGO;
 
 const client = new mongoCLient(uri);
 
