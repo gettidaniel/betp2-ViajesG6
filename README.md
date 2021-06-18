@@ -5,9 +5,10 @@ Es una app de vuelos, en la que se realizan consultas pudiendo filtrar por país
 
 ##### Funciones
 Buscar pasajes (se podrá filtrar la búsqueda y luego listar los distintos paquetes según las preferencias del usuario. Menor precio/etc ).
-Comprar Pasajes. *UsuarioCliente 
-Agregar viajes a favoritos. *UsuarioCliente 
-Modificar datos del perfil. *UsuarioCliente 
+Comprar Pasajes. *UsuarioCliente
+Cancelar Pasajes. *UsuarioCliente
+Agregar viajes a favoritos. *UsuarioCliente
+Modificar datos del perfil. *UsuarioCliente
 Visualizar lista de viajes añadidos a favoritos. *UsuarioCliente
 
 
@@ -20,6 +21,8 @@ Vuelo
 Compra
 Registro
 Usuario
+Origen
+Destino
  
 ##### Package
 Ejecuta `npm install`, instalando así todas las dependencias en el path _node\_modules_. 
@@ -43,9 +46,13 @@ También verá el hilo de errores en la consola.
 
 ##### Endpoints
 
-/home (oferta de vuelos recomendados) : get
-/signin : post
-/signup (registrarse) : post
-/search (busqueda de vuelo) : post
-/profile (eliminar cuenta) : delete
-/profile (actualizar perfil) : update
+/vuelos (oferta de vuelos recomendados) : get <!--(home)->
+<!--Definir como filtro tirar los vuelos mas baratos (vuelosMasBaratos = true)-->
+/login : post <!--(log in)->
+/signup (registrarse) : post <!--(registrarse)->
+/vuelos (busqueda de vuelo) : post <!--(search)->
+/compra (compra de vuelo) : post
+<!--Se llama desde el front-->
+<!--Que el usuario tenga en su perfil "mis compras" sus vuelos comprados y tenga la opcion de cancelarlos-->
+/usuario (eliminar cuenta) : delete <!--(profile)->
+/usuario (actualizar perfil) : update <!--(profile)->

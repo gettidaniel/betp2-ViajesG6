@@ -3,17 +3,19 @@ let objectId = require('mongodb').ObjectId;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const dbName = 'sample_tp2';
+
 async function getUsuarios() {
     const clienteMongo = await connection.getConnection();
 
-    const Usuarios = await clienteMongo.db('sample_tp2').collection('usuarios').find()
+    const Usuarios = await clienteMongo.db(dbName).collection('usuarios').find()
         .toArray();
     return Usuarios;
 }
 
 async function getUsuario(id) {
     const clienteMongo = await connection.getConnection();
-    const usuario = await clienteMongo.db('sample_tp2').collection('usuarios')
+    const usuario = await clienteMongo.db(dbName).collection('usuarios')
         .findOne({_id: new objectId(id)});
     return usuario;
 }
@@ -22,7 +24,7 @@ async function addUsuario(usuario) {
     const clienteMongo = await connection.getConnection();
     usuario.password = bcrypt.hashSync(usuario.password, 8);
     
-    const agregar = await clienteMongo.db('sample_tp2').collection('usuarios')
+    const agregar = await clienteMongo.db(dbName).collection('usuarios')
         .insertOne(usuario);
     return agregar;
 }
@@ -30,7 +32,7 @@ async function addUsuario(usuario) {
 async function findByCredentials(email, password){
     const clienteMongo = await connection.getConnection();
 
-    const user = await clienteMongo.db('sample_tp2')
+    const user = await clienteMongo.db(dbName)
         .collection('users')
         .findOne({email:email});
 
@@ -62,14 +64,14 @@ async function updateUsuario(usuario) {
             mail: usuario.mail
         }
     };
-    const actualizar = await clienteMongo.db('sample_tp2').collection('usuarios')
+    const actualizar = await clienteMongo.db(dbName).collection('usuarios')
         .updateOne(query,newvalues);
     return actualizar;
 }
 
-async function deleteUsuario(usuario) {
+async function deleteUsuario(id) {
     const clienteMongo = await connection.getConnection();
-    const borrar = await clienteMongo.db('sample_tp2').collection('usuarios').deleteOne({_id: new objectId(id)}); 
+    const borrar = await clienteMongo.db(dbName).collection('usuarios').deleteOne({_id: new objectId(id)}); 
     return borrar;
 }
 
