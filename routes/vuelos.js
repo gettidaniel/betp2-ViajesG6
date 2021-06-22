@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const dataVuelo = require('../data/vuelodb');
+const auth = require('../middleware/auth');
 
 /* GET vuelos listing. */
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     const vuelos = await dataVuelo.getVuelos();
     res.json(vuelos);
 });

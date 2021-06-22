@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const dataUser = require('../data/userdb');
+const auth = require('../middleware/auth');
 
 /* GET usuarios listing. */
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     const usuarios = await dataUser.getUsuarios();
     res.json(usuarios);
 });
@@ -21,6 +22,8 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     //TODO Validacion
+    console.log('Check point 1');
+    console.log(req.body);
     const usuario = await dataUser.addUsuario(req.body);
     res.json(usuario);
 });
@@ -28,7 +31,7 @@ router.post('/', async (req, res) => {
 router.post('/login', async (req, res) => {
 
     try {
-        const user = await dataUser.findByCredentials(req.body.email, req.body.password);
+        const user = await dataUser.findByCredentials(req.body.mail, req.body.password);
         const token = await dataUser.generateJWT(user);
 
         res.send({user, token});
@@ -47,11 +50,11 @@ router.put('/:id', async (req, res) => {
     usuario = await dataUser.updateUsuario(usuario);
     res.json(usuario);
 });
-
-router.delete('/:id', async (req, res) => {
+// el 'auth' dentro de los parametros, ejecuta el middleware
+router.delete('/:id', auth, async (req, res) => {
     let id = req.params.id;
-    await dataUser.deleteUsuario(id)
-    res.send('Eliminado');
+    await dataUser.deleteUsuario(id);
+    res.send('Usuario eliminado');
 });
 
 module.exports = router

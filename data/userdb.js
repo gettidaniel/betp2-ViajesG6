@@ -31,11 +31,11 @@ async function addUsuario(usuario) {
 
 async function findByCredentials(email, password){
     const clienteMongo = await connection.getConnection();
-
+    console.log(email);
     const user = await clienteMongo.db(dbName)
-        .collection('users')
-        .findOne({email:email});
-
+        .collection('usuarios')
+        .findOne({mail:email});
+        console.log(user);
         if (!user){
             throw new Error('Usuario inexistente');
         }
