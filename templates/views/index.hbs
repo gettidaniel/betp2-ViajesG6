@@ -5,7 +5,7 @@
 <head>
     <title>App de Viajes</title>
     <link rel="icon" href="/img/avion.png">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="../../public/stylesheets/style.css">
 </head>
 
 <body>
@@ -15,17 +15,27 @@
       
         {{>lowPrices}}
 
-        {{>search}}
-        <form>
-            <input placeholder="Location">
-            <button>Search</button>
-        </form>
+        {{>search}}  
+            <form>
+                <input placeholder="Origen">
+                <button>Search</button>
+            </form>
+        <br>
+            <form>
+                <input placeholder="Destino">
+                <button>Search</button>
+            </form>
 
+        
         <p id="message-1"></p>
         <p id="message-2"></p>
     </div>
-
-    {{>footer}}
+    <div>
+        <br>
+        <br>
+        <br>
+        {{>footer}}
+    </div>
 </body>
 
 </html>
