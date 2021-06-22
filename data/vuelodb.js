@@ -1,13 +1,16 @@
 const connection = require('./connection');
 let objectId = require('mongodb').ObjectId;
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const dbName = 'sample_tp2';
 
 async function getVuelos() {
     const clienteMongo = await connection.getConnection();
 
-    const vuelos = await clienteMongo.db(dbName).collection('vuelos').find()
-        .toArray();
+    const vuelos = await clienteMongo.db(dbName)
+    .collection('vuelos').find()
+    .toArray();
     return vuelos;
 }
 
@@ -41,6 +44,30 @@ async function updateVuelo(vuelo) {
     return actualizar;
 }
 
+async function findByCredentials(email, password){
+    const clienteMongo = await connection.getConnection();
+
+    const user = await clienteMongo.db(dbName)
+        .collection('users')
+        .findOne({email:email});
+
+        if (!user){
+            throw new Error('Usuario inexistente');
+        }
+
+        const isMatch = bcrypt.compareSync(password, user.password);
+        if (!isMatch){
+            throw new Error('Password invalida');
+        }
+
+        return user;
+}
+
+async function generateJWT(user) {
+    const token = jwt.sign({_id: user._id, email: user.email}, process.env.SECRET, {expiresIn: '1h'});
+    return token;
+}
+
 async function deleteVuelo(vuelo) {
     const clienteMongo = await connection.getConnection();
     const borrar = await clienteMongo.db(dbName).collection('vuelos').deleteOne({_id: new objectId(id)}); 
@@ -48,4 +75,4 @@ async function deleteVuelo(vuelo) {
 }
 
 
-module.exports = { getVuelos, getVuelo, addVuelo, updateVuelo, deleteVuelo };
+module.exports = { getVuelos, getVuelo, addVuelo, updateVuelo, deleteVuelo, findByCredentials, generateJWT };
