@@ -1,24 +1,29 @@
 const connection = require('./connection');
 let objectId = require('mongodb').ObjectId;
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const dbName = 'sample_tp2';
 
 async function getVuelos() {
     const clienteMongo = await connection.getConnection();
 
-    const vuelos = await clienteMongo.db('sample_tp2').collection('vuelos').find()
-        .toArray();
+    const vuelos = await clienteMongo.db(dbName)
+    .collection('vuelos').find()
+    .toArray();
     return vuelos;
 }
 
 async function getVuelo(id) {
     const clienteMongo = await connection.getConnection();
-    const vuelo = await clienteMongo.db('sample_tp2').collection('vuelos')
+    const vuelo = await clienteMongo.db(dbName).collection('vuelos')
         .findOne({_id: new objectId(id)});
     return vuelo;
 }
 
 async function addVuelo(vuelo) {
     const clienteMongo = await connection.getConnection();
-    const agregar = await clienteMongo.db('sample_tp2').collection('vuelos')
+    const agregar = await clienteMongo.db(dbName).collection('vuelos')
         .insertOne(vuelo);
     return agregar;
 }
@@ -34,16 +39,40 @@ async function updateVuelo(vuelo) {
             precio: vuelo.precio
         }
     };
-    const actualizar = await clienteMongo.db('sample_tp2').collection('vuelos')
+    const actualizar = await clienteMongo.db(dbName).collection('vuelos')
         .updateOne(query,newvalues);
     return actualizar;
 }
 
+async function findByCredentials(email, password){
+    const clienteMongo = await connection.getConnection();
+
+    const user = await clienteMongo.db(dbName)
+        .collection('users')
+        .findOne({email:email});
+
+        if (!user){
+            throw new Error('Usuario inexistente');
+        }
+
+        const isMatch = bcrypt.compareSync(password, user.password);
+        if (!isMatch){
+            throw new Error('Password invalida');
+        }
+
+        return user;
+}
+
+async function generateJWT(user) {
+    const token = jwt.sign({_id: user._id, email: user.email}, process.env.SECRET, {expiresIn: '1h'});
+    return token;
+}
+
 async function deleteVuelo(vuelo) {
     const clienteMongo = await connection.getConnection();
-    const borrar = await clienteMongo.db('sample_tp2').collection('vuelos').deleteOne({_id: new objectId(id)}); 
+    const borrar = await clienteMongo.db(dbName).collection('vuelos').deleteOne({_id: new objectId(id)}); 
     return borrar;
 }
 
 
-module.exports = { getVuelos, getVuelo, addVuelo, updateVuelo, deleteVuelo };
+module.exports = { getVuelos, getVuelo, addVuelo, updateVuelo, deleteVuelo, findByCredentials, generateJWT };
