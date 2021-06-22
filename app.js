@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/vuelos', vuelosRouter)
+app.use('/vuelos', vuelosRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
